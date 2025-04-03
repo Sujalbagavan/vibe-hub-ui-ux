@@ -9,24 +9,187 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      career_recommendations: {
+      ai_chat_messages: {
         Row: {
           created_at: string
           id: string
-          recommendation_data: Json
+          message: string
+          response: string
           user_id: string
         }
         Insert: {
           created_at?: string
           id?: string
-          recommendation_data: Json
+          message: string
+          response: string
           user_id: string
         }
         Update: {
           created_at?: string
           id?: string
-          recommendation_data?: Json
+          message?: string
+          response?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      event_attendees: {
+        Row: {
+          created_at: string
+          event_id: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          event_id: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          event_id?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_attendees_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      event_comments: {
+        Row: {
+          content: string
+          created_at: string
+          event_id: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          event_id: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          event_id?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_comments_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      event_volunteers: {
+        Row: {
+          created_at: string
+          event_id: string
+          id: string
+          role_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          event_id: string
+          id?: string
+          role_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          event_id?: string
+          id?: string
+          role_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_volunteers_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_volunteers_role_id_fkey"
+            columns: ["role_id"]
+            isOneToOne: false
+            referencedRelation: "volunteer_roles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      events: {
+        Row: {
+          category: string
+          created_at: string
+          date: string
+          description: string
+          end_time: string
+          id: string
+          image: string | null
+          is_free: boolean
+          location: Json
+          organizer_id: string
+          organizer_name: string
+          spots_remaining: number | null
+          start_time: string
+          ticket_price: number | null
+          title: string
+          total_spots: number | null
+          updated_at: string
+        }
+        Insert: {
+          category: string
+          created_at?: string
+          date: string
+          description: string
+          end_time: string
+          id?: string
+          image?: string | null
+          is_free?: boolean
+          location: Json
+          organizer_id: string
+          organizer_name: string
+          spots_remaining?: number | null
+          start_time: string
+          ticket_price?: number | null
+          title: string
+          total_spots?: number | null
+          updated_at?: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          date?: string
+          description?: string
+          end_time?: string
+          id?: string
+          image?: string | null
+          is_free?: boolean
+          location?: Json
+          organizer_id?: string
+          organizer_name?: string
+          spots_remaining?: number | null
+          start_time?: string
+          ticket_price?: number | null
+          title?: string
+          total_spots?: number | null
+          updated_at?: string
         }
         Relationships: []
       }
@@ -37,6 +200,7 @@ export type Database = {
           full_name: string | null
           id: string
           updated_at: string
+          user_role: string
         }
         Insert: {
           avatar_url?: string | null
@@ -44,6 +208,7 @@ export type Database = {
           full_name?: string | null
           id: string
           updated_at?: string
+          user_role?: string
         }
         Update: {
           avatar_url?: string | null
@@ -51,35 +216,47 @@ export type Database = {
           full_name?: string | null
           id?: string
           updated_at?: string
+          user_role?: string
         }
         Relationships: []
       }
-      resumes: {
+      volunteer_roles: {
         Row: {
           created_at: string
+          description: string
+          event_id: string
           id: string
-          resume_data: Json
+          spots_filled: number
+          spots_total: number
           title: string
-          updated_at: string
-          user_id: string
         }
         Insert: {
           created_at?: string
+          description: string
+          event_id: string
           id?: string
-          resume_data: Json
+          spots_filled?: number
+          spots_total: number
           title: string
-          updated_at?: string
-          user_id: string
         }
         Update: {
           created_at?: string
+          description?: string
+          event_id?: string
           id?: string
-          resume_data?: Json
+          spots_filled?: number
+          spots_total?: number
           title?: string
-          updated_at?: string
-          user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "volunteer_roles_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {
