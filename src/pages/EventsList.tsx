@@ -21,7 +21,7 @@ const EventsList: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   
   const [searchQuery, setSearchQuery] = useState(searchParams.get('search') || '');
-  const [selectedCategory, setSelectedCategory] = useState<string>(searchParams.get('category') || '');
+  const [selectedCategory, setSelectedCategory] = useState<string>(searchParams.get('category') || 'all');
   const [showFreeOnly, setShowFreeOnly] = useState(false);
   const [sortBy, setSortBy] = useState('date');
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
@@ -36,9 +36,9 @@ const EventsList: React.FC = () => {
       : true;
     
     // Category filter
-    const matchesCategory = selectedCategory
-      ? event.category === selectedCategory
-      : true;
+    const matchesCategory = selectedCategory === 'all' 
+      ? true 
+      : event.category === selectedCategory;
     
     // Free events filter
     const matchesFree = showFreeOnly
@@ -78,7 +78,7 @@ const EventsList: React.FC = () => {
   const handleCategoryChange = (value: string) => {
     setSelectedCategory(value);
     const newParams = new URLSearchParams(searchParams);
-    if (value) {
+    if (value && value !== 'all') {
       newParams.set('category', value);
     } else {
       newParams.delete('category');
@@ -89,7 +89,7 @@ const EventsList: React.FC = () => {
   // Handle filter reset
   const handleResetFilters = () => {
     setSearchQuery('');
-    setSelectedCategory('');
+    setSelectedCategory('all');
     setShowFreeOnly(false);
     setSortBy('date');
     setSearchParams(new URLSearchParams());
@@ -148,7 +148,7 @@ const EventsList: React.FC = () => {
                         <SelectValue placeholder="All Categories" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="">All Categories</SelectItem>
+                        <SelectItem value="all">All Categories</SelectItem>
                         <SelectItem value="Charity">Charity</SelectItem>
                         <SelectItem value="Meetup">Meetup</SelectItem>
                         <SelectItem value="Cultural">Cultural</SelectItem>
@@ -301,7 +301,7 @@ const EventsList: React.FC = () => {
                       <SelectValue placeholder="All Categories" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="">All Categories</SelectItem>
+                      <SelectItem value="all">All Categories</SelectItem>
                       <SelectItem value="Charity">Charity</SelectItem>
                       <SelectItem value="Meetup">Meetup</SelectItem>
                       <SelectItem value="Cultural">Cultural</SelectItem>
